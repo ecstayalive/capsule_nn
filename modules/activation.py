@@ -1,12 +1,13 @@
 from torch import Tensor
 from torch.nn import Module
+
 from .. import functional as F
 
-__all__ = ['Squash']
+__all__ = ["Squash"]
 
 
 class Squash(Module):
-    r""" Non-Linear activation function used in Capsule
+    r"""Non-Linear activation function used in Capsule
 
     Args:
         None

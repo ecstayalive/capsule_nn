@@ -27,9 +27,9 @@ class CapsLinear(Module):
 
     Attributes:
         weight: the learnable weights of the module of shape
-            :math:`(*, out\_feature\_numbers, in\_feature\_numbers, out\_dimension, in\_dimension)` 
+            :math:`(*, out\_feature\_numbers, in\_feature\_numbers, out\_dimension, in\_dimension)`
             where :math:`*` means any number of dimensions.
-            The values are initialized from :math:`\alpha * \mathcal{N}(0, 1)`, where 
+            The values are initialized from :math:`\alpha * \mathcal{N}(0, 1)`, where
             :math:`\alpha` mean a scaling factor.
 
     Examples::
