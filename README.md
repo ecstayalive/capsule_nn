@@ -15,7 +15,7 @@ Now we have ten features, which come from the input feature matrix, to derive a 
 In order to implement the dynamic routing algorithm, we will initialize a matrix with shape $(1, 5, 10)$, and perform softmax operation along the dimension with index $1$ to obtain an assignment matrix. Next use the dynamic routing algorithm which is introduced in the paper to update the assignment matrix.
 
 ## Warnings
-If you want to use gpt to train the model, you can't use the following code
+If you want to use gpu to train the model, you can't use the following code
 ```
 model = CapsLinear((10, 8), (5, 2))
 model.cuda()

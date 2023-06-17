@@ -49,13 +49,13 @@ class CapsLinear(Module):
     def __init__(self, in_features: tuple, out_features: tuple, routings: int = 3,
                  device=None, dtype=None) -> None:
         super(CapsLinear, self).__init__()
-        self.factory_kwargs = {'device': device, 'dtype': dtype}
+        factory_kwargs = {'device': device, 'dtype': dtype}
         self.in_features = in_features
         self.out_features = out_features
         self._weight_shape = (out_features[0], in_features[0],
                               out_features[1], in_features[1])
         self.weight = Parameter(
-            torch.empty(self._weight_shape, **self.factory_kwargs)
+            torch.empty(self._weight_shape, **factory_kwargs)
         )
         self.routings = routings
         self.reset_parameters()
@@ -70,7 +70,7 @@ class CapsLinear(Module):
 
         b = Variable(
             torch.zeros(input.shape[0], self.out_features[0],
-                        self.in_features[0], **self.factory_kwargs)
+                        self.in_features[0], device=self.weight.device)
         )
         assert self.routings > 0, "The parameter 'routings' should be > 0."
         for idx in range(self.routings):
