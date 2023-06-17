@@ -13,20 +13,3 @@ Then we need to affine transform the data. For one feature vector, we already th
 Now we have ten features, which come from the input feature matrix, to derive a category. But we have five categories, thus we need to make $5$ times affine transform. And for this reason, the affine matrix's real shape is $(5, 10, 4, 8)$. Because we use pytorch to do this matrix multiplication, thus we need to change the input feature matrix to $(1, 1, 10, 8, 1)$. Then, pytorch will broadcast the input matrix to achieve the matrix multiplication, and we will get a matrix with shape $(1, 5, 10, 4, 1)$.
 
 In order to implement the dynamic routing algorithm, we will initialize a matrix with shape $(1, 5, 10)$, and perform softmax operation along the dimension with index $1$ to obtain an assignment matrix. Next use the dynamic routing algorithm which is introduced in the paper to update the assignment matrix.
-
-## Warnings
-If you want to use gpu to train the model, you can't use the following code
-```
-model = CapsLinear((10, 8), (5, 2))
-model.cuda()
-# or
-device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-model.to(device)
-```
-This is a bug, because of the existing of dynamic routing between in Capsule Linear Layer. By default, the CPU will be used for calculations. But if you want to use gpu, you have to use a specified device by passing the device name to CapsLinear. For example:
-```
-device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-model = CapsLinear((10, 8), (5, 2), device=device)
-```
-
-In later version, we may fix this bug.

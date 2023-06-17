@@ -10,11 +10,11 @@ authors:
     email: ecstayalive@163.com
 repository-code: 'https://github.com/ecstayalive/capsule_nn'
 abstract: >-
-  PyTorch implementation of Capsules Network, 
+  PyTorch implementation of Capsules Network,
   an idea from the NIPS 2017 paper [Dynamic Routing Between Capsules].
 keywords:
   - Capsule Networks
   - Dynamic Routing
 license: Apache-2.0
-version: 1.0.0
+version: 2.0.0
 date-released: '2023-04-14'
