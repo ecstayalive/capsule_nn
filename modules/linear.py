@@ -1,8 +1,8 @@
 import torch
-from torch import Tensor
-from torch.nn import Parameter, Module, init
 import torch.nn.functional as F
-from torch.autograd import Variable
+from torch import Tensor
+from torch.nn import init, Module, Parameter
+
 from ..functional import squash
 
 __all__ = ["CapsLinear"]
@@ -48,8 +48,8 @@ class CapsLinear(Module):
 
     def __init__(self, in_features: tuple, out_features: tuple, routings: int = 3,
                  device=None, dtype=None) -> None:
-        super(CapsLinear, self).__init__()
-        factory_kwargs = {'device': device, 'dtype': dtype}
+        super().__init__()
+        factory_kwargs = {"device": device, "dtype": dtype}
         self.in_features = in_features
         self.out_features = out_features
         self._weight_shape = (out_features[0], in_features[0],
@@ -60,7 +60,7 @@ class CapsLinear(Module):
         self.routings = routings
         self.reset_parameters()
 
-    def reset_parameters(self, scales: float = 1.) -> None:
+    def reset_parameters(self, scales: float = 1.0) -> None:
         init.xavier_normal_(self.weight) * scales
 
     def forward(self, input: Tensor) -> Tensor:
@@ -68,10 +68,9 @@ class CapsLinear(Module):
         x_hat = torch.squeeze(x_hat, dim=-1)
         x_hat_detached = x_hat.detach()
 
-        b = Variable(
-            torch.zeros(input.shape[0], self.out_features[0],
+        b = torch.zeros(input.shape[0], self.out_features[0],
                         self.in_features[0], device=self.weight.device)
-        )
+
         assert self.routings > 0, "The parameter 'routings' should be > 0."
         for idx in range(self.routings):
             c = F.softmax(b, dim=1)
@@ -81,9 +80,11 @@ class CapsLinear(Module):
                 )
             else:
                 output = squash(
-                    torch.sum(c[:, :, :, None] * x_hat_detached,
-                              dim=-2, keepdim=True)
+                    torch.sum(c[:, :, :, None] * x_hat_detached, dim=-2, keepdim=True)
                 )
                 b = b + torch.sum(output * x_hat_detached, dim=-1)
 
         return torch.squeeze(output, dim=-2)
+
+    def extra_repr(self) -> str:
+        return f"in_features={self.in_features}, out_features={self.out_features}"
